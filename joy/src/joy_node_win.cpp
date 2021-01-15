@@ -126,9 +126,9 @@ class Joystick
     last_published_joy_msg.buttons.resize(SDL_CONTROLLER_BUTTON_MAX, 0);
     sticky_buttons_joy_msg.buttons.resize(SDL_CONTROLLER_BUTTON_MAX, 0);
 
-    joy_msg.axes.resize(2);
-    last_published_joy_msg.axes.resize(2);
-    sticky_buttons_joy_msg.axes.resize(2);
+    joy_msg.axes.resize(SDL_CONTROLLER_AXIS_MAX, 0);
+    last_published_joy_msg.axes.resize(SDL_CONTROLLER_AXIS_MAX, 0);
+    sticky_buttons_joy_msg.axes.resize(SDL_CONTROLLER_AXIS_MAX, 0);
 
     //Initialize SDL
     if (SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
