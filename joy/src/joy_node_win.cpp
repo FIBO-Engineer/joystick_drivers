@@ -178,6 +178,8 @@ class Joystick
           SDL_Event e;
           while (SDL_PollEvent(&e))
           {
+            std::cout << e.type << std::endl;
+            // ROS_WARN("Triggered");
             switch (e.type)
             {
               case SDL_JOYAXISMOTION:
@@ -200,6 +202,7 @@ class Joystick
                     }
 
                     joy_msg.axes[e.jaxis.axis] = value * scale;
+                    ROS_WARN("Axis triggered");
                   }
               }
               break;
@@ -207,11 +210,51 @@ class Joystick
               case SDL_JOYBUTTONDOWN:
               {
                   joy_msg.buttons[e.jbutton.button] = 1.0;
+                  // joy_msg.buttons[e.cbutton.button] = 1.0;
+                  // ROS_WARN("Button Down %d", e.jbutton.button);
+
               }
               break;
+
               case SDL_JOYBUTTONUP:
               {
                   joy_msg.buttons[e.jbutton.button] = 0.0;
+                  // ROS_WARN("Button Up %d", e.jbutton.button);
+              }
+              break;
+
+              case SDL_JOYHATMOTION:
+              {
+                  if(e.jhat.which == _gameControllerIndex)
+                  {
+                      double jvalue = e.jhat.value;
+                      ROS_WARN("e.jhat.hat = %d", e.jhat.hat);
+                      if(jvalue == SDL_HAT_CENTERED){
+                        joy_msg.buttons[10] = 0.0;
+                        joy_msg.buttons[11] = 0.0;
+                        joy_msg.buttons[12] = 0.0;
+                        joy_msg.buttons[13] = 0.0;
+                        ROS_WARN("DPad Released");
+                      }
+                      if(jvalue == SDL_HAT_UP){
+                        joy_msg.buttons[10] = 1.0;
+                        ROS_WARN("DPad Up");
+                      }
+                      if(jvalue == SDL_HAT_DOWN){
+                        joy_msg.buttons[11] = 1.0;
+                        ROS_WARN("DPad Down");
+                      }
+                      if(jvalue == SDL_HAT_LEFT){
+                        joy_msg.buttons[12] = 1.0;
+                        ROS_WARN("DPad Left");
+                      }
+                      if(jvalue == SDL_HAT_RIGHT){
+                        joy_msg.buttons[13] = 1.0;
+                        ROS_WARN("DPad Right");
+                      }
+                  }
+                  // joy_msg.buttons[e.jhat.hat] = 1.0;
+                  // ROS_WARN("DPad Down %d", e.jhat.value);
               }
               break;
 
